@@ -3,12 +3,21 @@ import { apiRequest } from '../services/api';
 
 export const AuthContext = createContext(null);
 
+function getStoredUser() {
+  const saved = localStorage.getItem('user');
+  if (!saved) return null;
+
+  try {
+    return JSON.parse(saved);
+  } catch (_error) {
+    localStorage.removeItem('user');
+    return null;
+  }
+}
+
 export function AuthProvider({ children }) {
   const [token, setToken] = useState(() => localStorage.getItem('token'));
-  const [user, setUser] = useState(() => {
-    const saved = localStorage.getItem('user');
-    return saved ? JSON.parse(saved) : null;
-  });
+  const [user, setUser] = useState(getStoredUser);
 
   const login = async (matricula, senha) => {
     const data = await apiRequest('/auth/login', {
