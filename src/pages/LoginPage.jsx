@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import MascotGroup from '../components/MascotGroup';
+import MascotesInterativos from '../components/MascotesInterativos';
+import LoginCard from '../components/LoginCard';
 import { useAuth } from '../hooks/useAuth';
 
 export default function LoginPage() {
@@ -9,13 +10,18 @@ export default function LoginPage() {
   const { login } = useAuth();
   const [matricula, setMatricula] = useState('');
   const [senha, setSenha] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [passwordFocused, setPasswordFocused] = useState(false);
+  const [submitPulse, setSubmitPulse] = useState(0);
 
   const onSubmit = async (event) => {
     event.preventDefault();
     setError('');
+    setSubmitPulse((value) => value + 1);
     setLoading(true);
+
     try {
       await login(matricula, senha);
       navigate('/dashboard');
@@ -27,53 +33,44 @@ export default function LoginPage() {
   };
 
   return (
-    <main className="relative flex min-h-screen items-center justify-center overflow-hidden bg-slate-950 px-4 py-8">
-      <div className="absolute -left-24 -top-24 h-80 w-80 rounded-full bg-indigo-500/30 blur-3xl" />
-      <div className="absolute -right-24 bottom-0 h-80 w-80 rounded-full bg-cyan-500/30 blur-3xl" />
-      <motion.div
-        initial={{ opacity: 0, y: 24 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="z-10 grid w-full max-w-4xl gap-8 rounded-3xl border border-white/10 bg-slate-900/75 p-6 shadow-2xl backdrop-blur-xl md:grid-cols-2 md:p-10"
-      >
-        <section>
-          <h1 className="text-3xl font-bold text-white">Torcida Digital</h1>
-          <p className="mt-2 text-sm text-slate-300">Acesso ao sistema dos Jogos Internos.</p>
-          <form className="mt-8 space-y-4" onSubmit={onSubmit}>
-            <input
-              className="w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-3 text-slate-100 outline-none focus:border-cyan-400"
-              placeholder="Matrícula"
-              value={matricula}
-              onChange={(e) => setMatricula(e.target.value)}
-              required
-            />
-            <input
-              type="password"
-              className="w-full rounded-xl border border-slate-700 bg-slate-800 px-4 py-3 text-slate-100 outline-none focus:border-cyan-400"
-              placeholder="Senha institucional"
-              value={senha}
-              onChange={(e) => setSenha(e.target.value)}
-              required
-            />
-            {error && <p className="text-sm text-rose-300">{error}</p>}
-            <button
-              type="submit"
-              disabled={loading}
-              className="w-full rounded-xl bg-cyan-500 px-4 py-3 font-semibold text-slate-900 transition hover:bg-cyan-400 disabled:opacity-60"
-            >
-              {loading ? 'Entrando...' : 'Acessar'}
-            </button>
-          </form>
-        </section>
+    <main className="relative min-h-screen overflow-hidden bg-[#0B0F1A] px-4 py-8 text-[#E5E7EB]">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_20%,rgba(79,70,229,0.35),transparent_35%),radial-gradient(circle_at_80%_10%,rgba(108,99,255,0.25),transparent_30%),linear-gradient(180deg,#0B0F1A,#05070D)]" />
+      <div className="absolute -left-8 top-24 h-56 w-56 rounded-full bg-indigo-600/20 blur-3xl" />
+      <div className="absolute bottom-20 right-10 h-72 w-72 rounded-full bg-purple-600/20 blur-3xl" />
 
-        <section className="flex flex-col justify-between gap-6">
-          <MascotGroup active={Boolean(senha)} />
-          <div className="rounded-xl border border-white/10 bg-slate-800/70 p-4 text-sm text-slate-300">
-            Dica demo: use <strong>2024001</strong> / <strong>senha123</strong>.
+      <div className="relative z-10 mx-auto grid min-h-[calc(100vh-64px)] w-full max-w-7xl items-center gap-10 lg:grid-cols-[1.15fr_0.85fr]">
+        <section className="space-y-6">
+          <motion.h2 initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="max-w-lg text-4xl font-semibold leading-tight text-white lg:text-5xl">
+            Ambiente oficial da torcida com experiência tecnológica e minimalista
+          </motion.h2>
+          <p className="max-w-lg text-slate-300">
+            Conecte-se para participar das diretorias, acompanhar os avisos e organizar as etapas de cenário, dança, roteiro e produção.
+          </p>
+
+          <div className="pt-4">
+            <MascotesInterativos isPasswordFocused={passwordFocused} passwordValue={senha} submitPulse={submitPulse} />
           </div>
         </section>
-      </motion.div>
-      <footer className="absolute bottom-4 text-center text-xs text-slate-400">
-        Instituto de Ensino • Projeto Torcida Digital • 2026
+
+        <section>
+          <LoginCard
+            matricula={matricula}
+            senha={senha}
+            showPassword={showPassword}
+            loading={loading}
+            error={error}
+            onMatriculaChange={setMatricula}
+            onSenhaChange={setSenha}
+            onTogglePassword={() => setShowPassword((value) => !value)}
+            onSubmit={onSubmit}
+            onPasswordFocus={() => setPasswordFocused(true)}
+            onPasswordBlur={() => setPasswordFocused(false)}
+          />
+        </section>
+      </div>
+
+      <footer className="relative z-10 mt-6 border-t border-white/10 bg-[#070A12]/80 py-4 text-center text-xs text-slate-400">
+        © 2026 ScriptA. Todos os direitos reservados.
       </footer>
     </main>
   );
