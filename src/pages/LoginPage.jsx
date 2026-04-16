@@ -38,16 +38,21 @@ export default function LoginPage() {
       <div className="absolute -left-8 top-24 h-56 w-56 rounded-full bg-indigo-600/20 blur-3xl" />
       <div className="absolute bottom-20 right-10 h-72 w-72 rounded-full bg-purple-600/20 blur-3xl" />
 
-      <div className="relative z-10 mx-auto grid min-h-[calc(100vh-64px)] w-full max-w-7xl items-center gap-10 lg:grid-cols-[1.15fr_0.85fr]">
-        <section className="space-y-6">
-          <motion.h2 initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="max-w-lg text-4xl font-semibold leading-tight text-white lg:text-5xl">
-            Ambiente oficial da torcida com experiência tecnológica e minimalista
+      <div className="relative z-10 mx-auto grid min-h-[calc(100vh-64px)] w-full max-w-7xl items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]">
+        <section className="futuristic-grid glass-card rounded-[20px] border border-white/10 p-8">
+          <motion.h2
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="max-w-lg text-4xl font-semibold leading-tight text-white lg:text-5xl"
+          >
+            A sua torcida começa em uma interface elegante, moderna e viva
           </motion.h2>
-          <p className="max-w-lg text-slate-300">
-            Conecte-se para participar das diretorias, acompanhar os avisos e organizar as etapas de cenário, dança, roteiro e produção.
+          <p className="mt-4 max-w-lg text-slate-300">
+            Faça login para acompanhar ranking, avisos institucionais, votação de enquetes, eventos e planejamento colaborativo da torcida.
           </p>
 
-          <div className="pt-4">
+          <div className="mt-10">
+            <p className="mb-8 text-xs uppercase tracking-[0.24em] text-slate-400">Mascotes interativos</p>
             <MascotesInterativos isPasswordFocused={passwordFocused} passwordValue={senha} submitPulse={submitPulse} />
           </div>
         </section>

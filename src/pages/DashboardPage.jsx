@@ -8,6 +8,8 @@ import HeroEvento from '../components/HeroEvento';
 import GridDiretorias from '../components/GridDiretorias';
 import OverviewEvento from '../components/OverviewEvento';
 import Engajamento from '../components/Engajamento';
+import ParticipacaoHub from '../components/ParticipacaoHub';
+import ComunidadeHub from '../components/ComunidadeHub';
 
 export default function DashboardPage() {
   const { token, user, setUser, logout } = useAuth();
@@ -31,7 +33,7 @@ export default function DashboardPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[#0B0F1A] px-4 pb-10 text-[#E5E7EB] md:px-8">
+    <main className="futuristic-grid min-h-screen bg-[#0B0F1A] px-4 pb-12 text-[#E5E7EB] md:px-8">
       <nav className="fixed left-0 right-0 top-0 z-40 border-b border-[rgba(108,99,255,0.25)] bg-[#070A12]/85 backdrop-blur-lg">
         <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-4 md:px-8">
           <div className="flex items-center gap-3">
@@ -47,7 +49,7 @@ export default function DashboardPage() {
               <Bell size={16} />
             </button>
             <RoleBadge role={user?.role} />
-            <div className="flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-2 py-1.5">
+            <div className="hidden items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-2 py-1.5 sm:flex">
               <CircleUserRound size={16} />
               <span className="text-sm">{user?.name}</span>
             </div>
@@ -72,6 +74,8 @@ export default function DashboardPage() {
 
         <OverviewEvento />
         <Engajamento />
+        <ParticipacaoHub user={user} />
+        <ComunidadeHub />
       </div>
     </main>
   );

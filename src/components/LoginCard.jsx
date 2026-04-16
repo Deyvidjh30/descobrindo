@@ -14,9 +14,10 @@ export default function LoginCard({
   onPasswordBlur,
 }) {
   return (
-    <div className="glass-card rounded-3xl border border-[rgba(108,99,255,0.35)] p-8 shadow-2xl shadow-[rgba(79,70,229,0.25)]">
+    <div className="glass-card rounded-[20px] border border-[rgba(108,99,255,0.35)] p-8 shadow-2xl shadow-[rgba(79,70,229,0.25)] lg:p-10">
       <p className="text-xs tracking-[0.25em] text-slate-400">ACESSO</p>
       <h1 className="mt-2 text-4xl font-bold text-slate-100">Participe da torcida</h1>
+      <p className="mt-2 text-sm text-slate-400">Entre com suas credenciais institucionais para acessar o dashboard do evento.</p>
 
       <form onSubmit={onSubmit} className="mt-8 space-y-4">
         <label className="input-shell">
