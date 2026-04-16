@@ -1,15 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Bell, CircleUserRound } from 'lucide-react';
 import { apiRequest } from '../services/api';
 import { useAuth } from '../hooks/useAuth';
 import RoleBadge from '../components/RoleBadge';
-
-const diretoriaColors = {
-  DIACIN: 'from-green-500/30 to-green-800/40',
-  DIATINF: 'from-blue-500/30 to-blue-800/40',
-  DIACON: 'from-purple-500/30 to-purple-800/40',
-  DIAREN: 'from-red-500/30 to-red-800/40',
-};
+import HeroEvento from '../components/HeroEvento';
+import GridDiretorias from '../components/GridDiretorias';
+import OverviewEvento from '../components/OverviewEvento';
+import Engajamento from '../components/Engajamento';
 
 export default function DashboardPage() {
   const { token, user, setUser, logout } = useAuth();
@@ -27,48 +25,54 @@ export default function DashboardPage() {
       token,
       body: { diretoria: slug },
     });
+
     setUser(data.user);
     setMessage(`Solicitação enviada para ${slug}. Status: ${data.user.membershipStatus}.`);
   };
 
   return (
-    <main className="min-h-screen bg-slate-950 px-4 py-8 text-white md:px-8">
-      <header className="mb-8 flex flex-col justify-between gap-3 md:flex-row md:items-center">
-        <div>
-          <h1 className="text-2xl font-bold">Olá, {user?.name}</h1>
-          <p className="text-sm text-slate-300">Escolha sua diretoria para participar da torcida digital.</p>
-        </div>
-        <div className="flex items-center gap-3">
-          <RoleBadge role={user?.role} />
-          <button onClick={logout} className="rounded-lg border border-white/20 px-3 py-2 text-sm hover:bg-white/10">Sair</button>
-        </div>
-      </header>
-
-      {message && <p className="mb-4 rounded-lg bg-emerald-500/20 px-4 py-3 text-sm text-emerald-200">{message}</p>}
-
-      <section className="grid gap-4 md:grid-cols-2">
-        {directorias.map((d) => (
-          <article key={d.slug} className={`rounded-2xl border border-white/10 bg-gradient-to-br ${diretoriaColors[d.slug]} p-5`}>
-            <h2 className="text-xl font-semibold">{d.slug}</h2>
-            <p className="mt-2 text-sm text-slate-200">{d.description}</p>
-            <p className="mt-3 text-xs text-slate-300">Cursos: {d.courses.join(', ')}</p>
-            <div className="mt-4 flex gap-2">
-              <button
-                onClick={() => requestJoin(d.slug)}
-                disabled={Boolean(user?.diretoria && user?.diretoria !== d.slug)}
-                className="rounded-lg bg-white/90 px-3 py-2 text-sm font-semibold text-slate-900 disabled:cursor-not-allowed disabled:opacity-60"
-              >
-                Solicitar participação
-              </button>
-              {user?.diretoria === d.slug && user.membershipStatus === 'approved' && (
-                <button onClick={() => navigate(`/diretoria/${d.slug}`)} className="rounded-lg border border-white/40 px-3 py-2 text-sm">
-                  Acessar torcida
-                </button>
-              )}
+    <main className="min-h-screen bg-[#0B0F1A] px-4 pb-10 text-[#E5E7EB] md:px-8">
+      <nav className="fixed left-0 right-0 top-0 z-40 border-b border-[rgba(108,99,255,0.25)] bg-[#070A12]/85 backdrop-blur-lg">
+        <div className="mx-auto flex h-16 w-full max-w-7xl items-center justify-between px-4 md:px-8">
+          <div className="flex items-center gap-3">
+            <div className="h-8 w-8 rounded-lg bg-gradient-to-r from-[#6C63FF] to-[#4F46E5] shadow-[0_0_16px_rgba(108,99,255,0.8)]" />
+            <div>
+              <p className="text-sm font-semibold text-white">Torcida ScriptA</p>
+              <p className="text-xs text-slate-400">Painel institucional</p>
             </div>
-          </article>
-        ))}
-      </section>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <button className="rounded-xl border border-white/10 p-2 text-slate-300 hover:bg-white/10">
+              <Bell size={16} />
+            </button>
+            <RoleBadge role={user?.role} />
+            <div className="flex items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-2 py-1.5">
+              <CircleUserRound size={16} />
+              <span className="text-sm">{user?.name}</span>
+            </div>
+            <button onClick={logout} className="rounded-xl border border-white/10 px-3 py-1.5 text-sm hover:bg-white/10">
+              Sair
+            </button>
+          </div>
+        </div>
+      </nav>
+
+      <div className="mx-auto w-full max-w-7xl space-y-8">
+        <HeroEvento />
+
+        {message && <p className="rounded-xl border border-emerald-400/30 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-200">{message}</p>}
+
+        <GridDiretorias
+          directorias={directorias}
+          user={user}
+          onRequestJoin={requestJoin}
+          onAccessDiretoria={(slug) => navigate(`/diretoria/${slug}`)}
+        />
+
+        <OverviewEvento />
+        <Engajamento />
+      </div>
     </main>
   );
 }
